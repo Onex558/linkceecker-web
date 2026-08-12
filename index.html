@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Link Checker</title>
 
 <style>
@@ -13,123 +12,162 @@
 
 body {
     margin: 0;
-    background: #070b08;
-    color: #ecfff3;
-    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top, #102318 0%, #070b08 45%, #050705 100%);
+    color: #eafff1;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 header {
-    padding: 30px 20px;
+    padding: 35px 20px;
     text-align: center;
-    background: #0b110d;
-    border-bottom: 1px solid #193b27;
+    border-bottom: 1px solid #1c3d28;
+    background: rgba(7, 12, 9, .9);
 }
 
-header h1 {
-    margin: 0;
+.logo {
+    font-size: 38px;
+    font-weight: 900;
     color: #39ff88;
-    font-size: 34px;
+    letter-spacing: 1px;
 }
 
-header p {
-    color: #84988c;
-    margin: 8px 0 0;
+.subtitle {
+    color: #829889;
+    margin-top: 8px;
 }
 
 .container {
-    width: min(1050px, calc(100% - 30px));
+    width: min(1100px, calc(100% - 30px));
     margin: 30px auto;
 }
 
 .card {
-    background: #0c130f;
-    border: 1px solid #193b27;
-    border-radius: 15px;
-    padding: 20px;
+    background: rgba(12, 20, 15, .95);
+    border: 1px solid #1b3d27;
+    border-radius: 16px;
+    padding: 22px;
     margin-bottom: 20px;
+    box-shadow: 0 10px 35px rgba(0,0,0,.25);
+}
+
+h2 {
+    margin-top: 0;
 }
 
 textarea {
     width: 100%;
-    height: 220px;
+    min-height: 220px;
     resize: vertical;
 
-    background: #070b08;
-    color: #fff;
+    background: #060a07;
+    color: #effff5;
 
     border: 1px solid #285438;
-    border-radius: 10px;
+    border-radius: 11px;
 
-    padding: 15px;
+    padding: 16px;
     outline: none;
 
-    font-family: monospace;
+    font-family: Consolas, monospace;
     font-size: 14px;
 }
 
 textarea:focus {
     border-color: #39ff88;
+    box-shadow: 0 0 0 2px rgba(57,255,136,.08);
 }
 
 .buttons {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     margin-top: 15px;
-    flex-wrap: wrap;
 }
 
 button {
-    padding: 11px 18px;
     border: 0;
     border-radius: 9px;
+    padding: 12px 19px;
+    font-weight: 700;
+    cursor: pointer;
+}
 
+.primary {
     background: #39ff88;
     color: #061009;
+}
 
-    font-weight: bold;
-    cursor: pointer;
+.secondary {
+    background: #17231b;
+    color: #d9e8de;
+    border: 1px solid #2b4a35;
 }
 
 button:hover {
     filter: brightness(1.1);
 }
 
-button.secondary {
-    background: #18251c;
-    color: #d7e7dc;
-    border: 1px solid #294834;
+button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.status {
+    margin-top: 15px;
+    color: #83988a;
+    font-size: 14px;
+}
+
+.progress {
+    display: none;
+    margin-top: 14px;
+    width: 100%;
+    height: 7px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #152019;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: #39ff88;
+    transition: width .25s;
 }
 
 .stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 12px;
 }
 
 .stat {
     background: #080e0a;
-    border: 1px solid #193b27;
-    border-radius: 10px;
-    padding: 15px;
+    border: 1px solid #1b3825;
+    border-radius: 12px;
+    padding: 17px;
     text-align: center;
 }
 
-.stat-number {
-    font-size: 25px;
-    font-weight: bold;
+.number {
+    font-size: 28px;
+    font-weight: 800;
     color: #39ff88;
 }
 
-.stat-label {
-    color: #819487;
+.label {
+    margin-top: 5px;
+    color: #7f9486;
     font-size: 12px;
 }
 
 .search {
     width: 100%;
-    padding: 12px;
+    padding: 13px;
 
-    background: #070b08;
+    background: #060a07;
     border: 1px solid #285438;
     border-radius: 9px;
 
@@ -146,33 +184,33 @@ button.secondary {
 }
 
 .result {
-    padding: 15px;
     background: #080e0a;
-    border: 1px solid #193b27;
-    border-radius: 11px;
+    border: 1px solid #1b3825;
+    border-radius: 12px;
+    padding: 16px;
 }
 
-.result-header {
+.result-main {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     gap: 15px;
-    align-items: center;
 }
 
 .url {
-    font-family: monospace;
+    font-family: Consolas, monospace;
     word-break: break-all;
 }
 
 .badge {
-    padding: 5px 10px;
+    padding: 6px 11px;
     border-radius: 20px;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 800;
     white-space: nowrap;
 }
 
-.success {
+.ok {
     color: #39ff88;
     background: rgba(57,255,136,.1);
 }
@@ -182,43 +220,39 @@ button.secondary {
     background: rgba(255,209,102,.1);
 }
 
-.error {
+.bad {
     color: #ff7070;
     background: rgba(255,70,70,.1);
 }
 
-.info {
-    color: #93b8ff;
-    background: rgba(80,130,255,.1);
+.unknown {
+    color: #9bb5ff;
+    background: rgba(100,130,255,.1);
 }
 
 .details {
-    color: #819487;
-    font-size: 13px;
     margin-top: 9px;
+    color: #829487;
+    font-size: 13px;
+    line-height: 1.6;
     word-break: break-all;
 }
 
 .empty {
+    padding: 35px;
     text-align: center;
-    padding: 30px;
-    color: #687a6d;
+    color: #697b6e;
 }
 
-.progress {
-    height: 7px;
-    background: #142019;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-top: 15px;
-    display: none;
-}
-
-.progress-bar {
-    height: 100%;
-    width: 0%;
-    background: #39ff88;
-    transition: width .2s;
+.api-box {
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #060a07;
+    border: 1px solid #1b3825;
+    color: #8da493;
+    word-break: break-all;
 }
 
 @media(max-width:700px) {
@@ -226,7 +260,7 @@ button.secondary {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .result-header {
+    .result-main {
         flex-direction: column;
         align-items: flex-start;
     }
@@ -237,70 +271,98 @@ button.secondary {
 <body>
 
 <header>
-    <h1>🔗 Link Checker</h1>
-    <p>Check real HTTP responses from websites</p>
+    <div class="logo">🔗 LINK CHECKER</div>
+    <div class="subtitle">
+        Check real HTTP responses
+    </div>
 </header>
 
 <div class="container">
 
     <div class="card">
 
-        <h2>URLs</h2>
+        <h2>Check Links</h2>
 
-        <textarea id="links"
-placeholder="Enter one URL per line
+        <textarea
+            id="links"
+            placeholder="Enter one URL per line
 
 https://example.com
-https://example.com/test
-https://github.com"></textarea>
+https://google.com
+https://github.com"
+        ></textarea>
 
         <div class="buttons">
-            <button onclick="checkLinks()">
+
+            <button
+                class="primary"
+                id="checkButton"
+                onclick="checkLinks()">
                 Check Links
             </button>
 
-            <button class="secondary" onclick="example()">
+            <button
+                class="secondary"
+                onclick="loadExample()">
                 Example
             </button>
 
-            <button class="secondary" onclick="clearAll()">
+            <button
+                class="secondary"
+                onclick="clearAll()">
                 Clear
             </button>
+
+            <button
+                class="secondary"
+                onclick="exportResults()">
+                Export JSON
+            </button>
+
+        </div>
+
+        <div class="status" id="status">
+            Ready.
         </div>
 
         <div class="progress" id="progress">
-            <div class="progress-bar" id="progressBar"></div>
+            <div
+                class="progress-bar"
+                id="progressBar">
+            </div>
         </div>
 
     </div>
+
 
     <div class="card">
 
         <div class="stats">
 
             <div class="stat">
-                <div class="stat-number" id="total">0</div>
-                <div class="stat-label">TOTAL</div>
+                <div class="number" id="total">0</div>
+                <div class="label">TOTAL</div>
             </div>
 
             <div class="stat">
-                <div class="stat-number" id="success">0</div>
-                <div class="stat-label">2xx</div>
+                <div class="number" id="successful">0</div>
+                <div class="label">SUCCESS</div>
             </div>
 
             <div class="stat">
-                <div class="stat-number" id="redirect">0</div>
-                <div class="stat-label">REDIRECTS</div>
+                <div class="number" id="redirects">0</div>
+                <div class="label">REDIRECTS</div>
             </div>
 
             <div class="stat">
-                <div class="stat-number" id="errors">0</div>
-                <div class="stat-label">ERRORS</div>
+                <div class="number" id="failed">0</div>
+                <div class="label">FAILED</div>
             </div>
 
         </div>
 
     </div>
+
 
     <div class="card">
 
@@ -309,29 +371,89 @@ https://github.com"></textarea>
         <input
             class="search"
             id="search"
-            placeholder="Search results..."
-            oninput="render()"
+            placeholder="Search checked URLs..."
+            oninput="renderResults()"
         >
 
-        <div id="results" class="results">
+        <div
+            class="results"
+            id="results">
+
             <div class="empty">
-                Enter some URLs and click Check Links.
+                No links checked yet.
             </div>
+
         </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>API Server</h2>
+
+        <div class="api-box" id="apiDisplay"></div>
 
     </div>
 
 </div>
 
+
 <script>
+
+/*
+    =========================================================
+    CHANGE THIS
+    =========================================================
+
+    If index.html and server.js are hosted together:
+
+        const API_URL = "";
+
+    If your Node server is somewhere else:
+
+        const API_URL = "https://your-server.example.com";
+
+*/
+
+const API_URL = "";
+
+const CHECK_ENDPOINT =
+    API_URL + "/api/check";
+
 
 let results = [];
 
+
+/* Show API URL */
+
+document.getElementById("apiDisplay").textContent =
+    CHECK_ENDPOINT;
+
+
+/* =========================================================
+   CHECK LINKS
+   ========================================================= */
+
 async function checkLinks() {
 
-    const raw = document
-        .getElementById("links")
-        .value;
+    const textarea =
+        document.getElementById("links");
+
+    const button =
+        document.getElementById("checkButton");
+
+    const status =
+        document.getElementById("status");
+
+    const progress =
+        document.getElementById("progress");
+
+    const progressBar =
+        document.getElementById("progressBar");
+
+    const raw =
+        textarea.value;
 
     const links = [
         ...new Set(
@@ -343,157 +465,257 @@ async function checkLinks() {
     ];
 
     if (!links.length) {
-        alert("Enter at least one URL.");
+
+        status.textContent =
+            "Enter at least one URL.";
+
         return;
     }
 
-    const progress =
-        document.getElementById("progress");
+    results = [];
 
-    const bar =
-        document.getElementById("progressBar");
+    button.disabled = true;
 
     progress.style.display = "block";
-    bar.style.width = "20%";
+
+    progressBar.style.width = "10%";
+
+    status.textContent =
+        `Checking ${links.length} link${links.length === 1 ? "" : "s"}...`;
 
     document.getElementById("results").innerHTML =
-        '<div class="empty">Checking links...</div>';
+        `<div class="empty">Checking links...</div>`;
 
     try {
 
-        const response = await fetch("/api/check", {
-            method: "POST",
+        const response = await fetch(
+            CHECK_ENDPOINT,
+            {
+                method: "POST",
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-            body: JSON.stringify({
-                links
-            })
-        });
+                body: JSON.stringify({
+                    links: links
+                })
+            }
+        );
+
+        progressBar.style.width = "75%";
 
         if (!response.ok) {
+
             throw new Error(
-                `Server returned ${response.status}`
+                `Server returned HTTP ${response.status}`
             );
         }
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
-        results = data.results || [];
+        results =
+            Array.isArray(data.results)
+                ? data.results
+                : [];
 
-        bar.style.width = "100%";
+        progressBar.style.width = "100%";
 
         updateStats();
-        render();
 
-    } catch (error) {
+        renderResults();
+
+        status.textContent =
+            `Finished checking ${results.length} link${results.length === 1 ? "" : "s"}.`;
+
+    }
+
+    catch (error) {
+
+        results = [];
 
         document.getElementById("results").innerHTML =
             `<div class="empty">
                 ❌ ${escapeHTML(error.message)}
+                <br><br>
+                Make sure your Node server is running and that
+                the API URL is correct.
             </div>`;
 
-    } finally {
+        status.textContent =
+            "Unable to connect to the checker server.";
+
+    }
+
+    finally {
+
+        button.disabled = false;
 
         setTimeout(() => {
             progress.style.display = "none";
-        }, 500);
+            progressBar.style.width = "0%";
+        }, 600);
+
     }
 }
 
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
 function updateStats() {
 
-    const total = results.length;
+    const total =
+        results.length;
 
-    const success = results.filter(
-        r => r.status >= 200 && r.status < 300
-    ).length;
+    const successful =
+        results.filter(
+            r =>
+                r.status >= 200 &&
+                r.status < 300
+        ).length;
 
-    const redirect = results.filter(
-        r => r.status >= 300 && r.status < 400
-    ).length;
+    const redirects =
+        results.filter(
+            r =>
+                r.status >= 300 &&
+                r.status < 400
+        ).length;
 
-    const errors = results.filter(
-        r => !r.status || r.status >= 400
-    ).length;
+    const failed =
+        results.filter(
+            r =>
+                !r.status ||
+                r.status >= 400
+        ).length;
 
-    document.getElementById("total").textContent =
-        total;
 
-    document.getElementById("success").textContent =
-        success;
+    document.getElementById("total")
+        .textContent = total;
 
-    document.getElementById("redirect").textContent =
-        redirect;
+    document.getElementById("successful")
+        .textContent = successful;
 
-    document.getElementById("errors").textContent =
-        errors;
+    document.getElementById("redirects")
+        .textContent = redirects;
+
+    document.getElementById("failed")
+        .textContent = failed;
 }
 
-function render() {
 
-    const search =
-        document.getElementById("search")
-            .value
-            .toLowerCase();
+/* =========================================================
+   RESULTS
+   ========================================================= */
 
-    const filtered = results.filter(r =>
-        r.url.toLowerCase().includes(search)
-    );
+function renderResults() {
 
     const container =
         document.getElementById("results");
 
+    const search =
+        document.getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
+
+    const filtered =
+        results.filter(result =>
+            String(result.url)
+                .toLowerCase()
+                .includes(search)
+        );
+
+
     if (!filtered.length) {
 
         container.innerHTML =
-            '<div class="empty">No results.</div>';
+            `<div class="empty">
+                ${results.length
+                    ? "No matching results."
+                    : "No links checked yet."
+                }
+            </div>`;
 
         return;
     }
 
+
     container.innerHTML =
-        filtered.map(r => {
+        filtered.map(result => {
 
-            let badgeClass = "info";
-            let label = "UNKNOWN";
+            let className =
+                "unknown";
 
-            if (r.status >= 200 && r.status < 300) {
-                badgeClass = "success";
-                label = `${r.status} OK`;
+            let label =
+                "UNKNOWN";
+
+
+            if (
+                result.status >= 200 &&
+                result.status < 300
+            ) {
+
+                className = "ok";
+
+                label =
+                    `${result.status} OK`;
+
             }
 
             else if (
-                r.status >= 300 &&
-                r.status < 400
+                result.status >= 300 &&
+                result.status < 400
             ) {
-                badgeClass = "redirect";
-                label = `${r.status} REDIRECT`;
-            }
 
-            else if (r.status >= 400) {
-                badgeClass = "error";
+                className = "redirect";
+
                 label =
-                    `${r.status} ${r.statusText || ""}`;
+                    `${result.status} REDIRECT`;
+
             }
 
-            else if (r.error) {
-                badgeClass = "error";
-                label = "FAILED";
+            else if (
+                result.status >= 400
+            ) {
+
+                className = "bad";
+
+                label =
+                    `${result.status} ${result.statusText || ""}`;
+
             }
+
+            else if (result.error) {
+
+                className = "bad";
+
+                label = "FAILED";
+
+            }
+
+
+            const finalUrl =
+                result.finalUrl &&
+                result.finalUrl !== result.url
+                    ? `<br>Final URL:
+                       ${escapeHTML(result.finalUrl)}`
+                    : "";
+
 
             return `
+
                 <div class="result">
 
-                    <div class="result-header">
+                    <div class="result-main">
 
                         <div class="url">
-                            ${escapeHTML(r.url)}
+                            ${escapeHTML(result.url)}
                         </div>
 
-                        <div class="badge ${badgeClass}">
+                        <div class="badge ${className}">
                             ${escapeHTML(label)}
                         </div>
 
@@ -501,59 +723,125 @@ function render() {
 
                     <div class="details">
 
-                        ${r.status
-                            ? `HTTP ${r.status} ${escapeHTML(r.statusText || "")}`
-                            : escapeHTML(r.error || "Unknown error")
-                        }
-
-                        • ${r.responseTime} ms
-
                         ${
-                            r.redirected
-                            ? " • Redirected"
-                            : ""
+                            result.status
+                                ? `HTTP ${result.status}
+                                   ${escapeHTML(result.statusText || "")}`
+                                : escapeHTML(
+                                    result.error ||
+                                    "Unknown error"
+                                )
                         }
 
                         ${
-                            r.finalUrl &&
-                            r.finalUrl !== r.url
-                            ? `<br>Final URL: ${escapeHTML(r.finalUrl)}`
-                            : ""
+                            result.responseTime != null
+                                ? ` • ${result.responseTime} ms`
+                                : ""
                         }
+
+                        ${
+                            result.redirected
+                                ? " • Redirected"
+                                : ""
+                        }
+
+                        ${finalUrl}
 
                     </div>
 
                 </div>
+
             `;
 
         }).join("");
 }
 
-function example() {
+
+/* =========================================================
+   EXAMPLE
+   ========================================================= */
+
+function loadExample() {
 
     document.getElementById("links").value =
 `https://example.com
-https://example.com/not-found
 https://github.com
 https://google.com
+https://example.com/not-found
 https://httpbin.org/status/404
 https://httpbin.org/status/500`;
 
 }
 
+
+/* =========================================================
+   CLEAR
+   ========================================================= */
+
 function clearAll() {
 
     results = [];
 
-    document.getElementById("links").value = "";
+    document.getElementById("links")
+        .value = "";
 
-    document.getElementById("search").value = "";
+    document.getElementById("search")
+        .value = "";
 
-    document.getElementById("results").innerHTML =
-        '<div class="empty">Enter some URLs and click Check Links.</div>';
+    document.getElementById("status")
+        .textContent = "Ready.";
 
     updateStats();
+
+    renderResults();
 }
+
+
+/* =========================================================
+   EXPORT
+   ========================================================= */
+
+function exportResults() {
+
+    if (!results.length) {
+
+        alert("There are no results to export.");
+
+        return;
+    }
+
+    const blob =
+        new Blob(
+            [JSON.stringify(results, null, 2)],
+            {
+                type: "application/json"
+            }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+        "link-check-results.json";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+    URL.revokeObjectURL(url);
+}
+
+
+/* =========================================================
+   HTML ESCAPING
+   ========================================================= */
 
 function escapeHTML(value) {
 
