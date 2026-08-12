@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Link Checker</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #070b08;
+    color: #ecfff3;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    padding: 30px 20px;
+    text-align: center;
+    background: #0b110d;
+    border-bottom: 1px solid #193b27;
+}
+
+header h1 {
+    margin: 0;
+    color: #39ff88;
+    font-size: 34px;
+}
+
+header p {
+    color: #84988c;
+    margin: 8px 0 0;
+}
+
+.container {
+    width: min(1050px, calc(100% - 30px));
+    margin: 30px auto;
+}
+
+.card {
+    background: #0c130f;
+    border: 1px solid #193b27;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 220px;
+    resize: vertical;
+
+    background: #070b08;
+    color: #fff;
+
+    border: 1px solid #285438;
+    border-radius: 10px;
+
+    padding: 15px;
+    outline: none;
+
+    font-family: monospace;
+    font-size: 14px;
+}
+
+textarea:focus {
+    border-color: #39ff88;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 11px 18px;
+    border: 0;
+    border-radius: 9px;
+
+    background: #39ff88;
+    color: #061009;
+
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    filter: brightness(1.1);
+}
+
+button.secondary {
+    background: #18251c;
+    color: #d7e7dc;
+    border: 1px solid #294834;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.stat {
+    background: #080e0a;
+    border: 1px solid #193b27;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 25px;
+    font-weight: bold;
+    color: #39ff88;
+}
+
+.stat-label {
+    color: #819487;
+    font-size: 12px;
+}
+
+.search {
+    width: 100%;
+    padding: 12px;
+
+    background: #070b08;
+    border: 1px solid #285438;
+    border-radius: 9px;
+
+    color: white;
+    outline: none;
+
+    margin-bottom: 15px;
+}
+
+.results {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.result {
+    padding: 15px;
+    background: #080e0a;
+    border: 1px solid #193b27;
+    border-radius: 11px;
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    align-items: center;
+}
+
+.url {
+    font-family: monospace;
+    word-break: break-all;
+}
+
+.badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.success {
+    color: #39ff88;
+    background: rgba(57,255,136,.1);
+}
+
+.redirect {
+    color: #ffd166;
+    background: rgba(255,209,102,.1);
+}
+
+.error {
+    color: #ff7070;
+    background: rgba(255,70,70,.1);
+}
+
+.info {
+    color: #93b8ff;
+    background: rgba(80,130,255,.1);
+}
+
+.details {
+    color: #819487;
+    font-size: 13px;
+    margin-top: 9px;
+    word-break: break-all;
+}
+
+.empty {
+    text-align: center;
+    padding: 30px;
+    color: #687a6d;
+}
+
+.progress {
+    height: 7px;
+    background: #142019;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 15px;
+    display: none;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #39ff88;
+    transition: width .2s;
+}
+
+@media(max-width:700px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .result-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🔗 Link Checker</h1>
+    <p>Check real HTTP responses from websites</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>URLs</h2>
+
+        <textarea id="links"
+placeholder="Enter one URL per line
+
+https://example.com
+https://example.com/test
+https://github.com"></textarea>
+
+        <div class="buttons">
+            <button onclick="checkLinks()">
+                Check Links
+            </button>
+
+            <button class="secondary" onclick="example()">
+                Example
+            </button>
+
+            <button class="secondary" onclick="clearAll()">
+                Clear
+            </button>
+        </div>
+
+        <div class="progress" id="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="stats">
+
+            <div class="stat">
+                <div class="stat-number" id="total">0</div>
+                <div class="stat-label">TOTAL</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-number" id="success">0</div>
+                <div class="stat-label">2xx</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-number" id="redirect">0</div>
+                <div class="stat-label">REDIRECTS</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-number" id="errors">0</div>
+                <div class="stat-label">ERRORS</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Results</h2>
+
+        <input
+            class="search"
+            id="search"
+            placeholder="Search results..."
+            oninput="render()"
+        >
+
+        <div id="results" class="results">
+            <div class="empty">
+                Enter some URLs and click Check Links.
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+let results = [];
+
+async function checkLinks() {
+
+    const raw = document
+        .getElementById("links")
+        .value;
+
+    const links = [
+        ...new Set(
+            raw
+                .split(/\r?\n/)
+                .map(x => x.trim())
+                .filter(Boolean)
+        )
+    ];
+
+    if (!links.length) {
+        alert("Enter at least one URL.");
+        return;
+    }
+
+    const progress =
+        document.getElementById("progress");
+
+    const bar =
+        document.getElementById("progressBar");
+
+    progress.style.display = "block";
+    bar.style.width = "20%";
+
+    document.getElementById("results").innerHTML =
+        '<div class="empty">Checking links...</div>';
+
+    try {
+
+        const response = await fetch("/api/check", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                links
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                `Server returned ${response.status}`
+            );
+        }
+
+        const data = await response.json();
+
+        results = data.results || [];
+
+        bar.style.width = "100%";
+
+        updateStats();
+        render();
+
+    } catch (error) {
+
+        document.getElementById("results").innerHTML =
+            `<div class="empty">
+                ❌ ${escapeHTML(error.message)}
+            </div>`;
+
+    } finally {
+
+        setTimeout(() => {
+            progress.style.display = "none";
+        }, 500);
+    }
+}
+
+function updateStats() {
+
+    const total = results.length;
+
+    const success = results.filter(
+        r => r.status >= 200 && r.status < 300
+    ).length;
+
+    const redirect = results.filter(
+        r => r.status >= 300 && r.status < 400
+    ).length;
+
+    const errors = results.filter(
+        r => !r.status || r.status >= 400
+    ).length;
+
+    document.getElementById("total").textContent =
+        total;
+
+    document.getElementById("success").textContent =
+        success;
+
+    document.getElementById("redirect").textContent =
+        redirect;
+
+    document.getElementById("errors").textContent =
+        errors;
+}
+
+function render() {
+
+    const search =
+        document.getElementById("search")
+            .value
+            .toLowerCase();
+
+    const filtered = results.filter(r =>
+        r.url.toLowerCase().includes(search)
+    );
+
+    const container =
+        document.getElementById("results");
+
+    if (!filtered.length) {
+
+        container.innerHTML =
+            '<div class="empty">No results.</div>';
+
+        return;
+    }
+
+    container.innerHTML =
+        filtered.map(r => {
+
+            let badgeClass = "info";
+            let label = "UNKNOWN";
+
+            if (r.status >= 200 && r.status < 300) {
+                badgeClass = "success";
+                label = `${r.status} OK`;
+            }
+
+            else if (
+                r.status >= 300 &&
+                r.status < 400
+            ) {
+                badgeClass = "redirect";
+                label = `${r.status} REDIRECT`;
+            }
+
+            else if (r.status >= 400) {
+                badgeClass = "error";
+                label =
+                    `${r.status} ${r.statusText || ""}`;
+            }
+
+            else if (r.error) {
+                badgeClass = "error";
+                label = "FAILED";
+            }
+
+            return `
+                <div class="result">
+
+                    <div class="result-header">
+
+                        <div class="url">
+                            ${escapeHTML(r.url)}
+                        </div>
+
+                        <div class="badge ${badgeClass}">
+                            ${escapeHTML(label)}
+                        </div>
+
+                    </div>
+
+                    <div class="details">
+
+                        ${r.status
+                            ? `HTTP ${r.status} ${escapeHTML(r.statusText || "")}`
+                            : escapeHTML(r.error || "Unknown error")
+                        }
+
+                        • ${r.responseTime} ms
+
+                        ${
+                            r.redirected
+                            ? " • Redirected"
+                            : ""
+                        }
+
+                        ${
+                            r.finalUrl &&
+                            r.finalUrl !== r.url
+                            ? `<br>Final URL: ${escapeHTML(r.finalUrl)}`
+                            : ""
+                        }
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+}
+
+function example() {
+
+    document.getElementById("links").value =
+`https://example.com
+https://example.com/not-found
+https://github.com
+https://google.com
+https://httpbin.org/status/404
+https://httpbin.org/status/500`;
+
+}
+
+function clearAll() {
+
+    results = [];
+
+    document.getElementById("links").value = "";
+
+    document.getElementById("search").value = "";
+
+    document.getElementById("results").innerHTML =
+        '<div class="empty">Enter some URLs and click Check Links.</div>';
+
+    updateStats();
+}
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+</script>
+
+</body>
+</html>
